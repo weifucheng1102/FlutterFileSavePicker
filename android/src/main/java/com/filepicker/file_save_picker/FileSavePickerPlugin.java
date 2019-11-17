@@ -21,7 +21,6 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -30,7 +29,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /** FileSavePickerPlugin */
-public class FileSavePickerPlugin implements FlutterPlugin, MethodCallHandler {
+public class FileSavePickerPlugin implements MethodCallHandler {
 
   private static final int WRITE_REQUEST_CODE = 43;
   private static final int REQUEST_CODE = WRITE_REQUEST_CODE;
@@ -44,12 +43,12 @@ public class FileSavePickerPlugin implements FlutterPlugin, MethodCallHandler {
   private static String mimeType;
   private static String filename;
 
-  @Override
-  public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(),
-        "file_save_picker");
-    channel.setMethodCallHandler(new FileSavePickerPlugin());
-  }
+  // @Override
+  // public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+  //   // final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(),
+  //       // "file_save_picker");
+  //   // channel.setMethodCallHandler(new FileSavePickerPlugin());
+  // }
 
   // This static function is optional and equivalent to onAttachedToEngine. It
   // supports the old
@@ -66,6 +65,7 @@ public class FileSavePickerPlugin implements FlutterPlugin, MethodCallHandler {
   // be defined
   // in the same class.
   public static void registerWith(Registrar registrar) {
+
     if (registrar.activity() == null) {
       return;
     }
@@ -142,6 +142,7 @@ public class FileSavePickerPlugin implements FlutterPlugin, MethodCallHandler {
 
   private static void runOnUiThread(final Result result, final String path, final boolean success,
       final String errorMessage) {
+
     instance.activity().runOnUiThread(new Runnable() {
       @Override
       public void run() {
@@ -179,14 +180,14 @@ public class FileSavePickerPlugin implements FlutterPlugin, MethodCallHandler {
   }
 
   private static boolean checkPermission() {
-    Activity activity = instance.activity();
     Log.i(TAG, "Checking permission: " + permission);
+    Activity activity = instance.activity();
     return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(activity, permission);
   }
 
   private static void requestPermission() {
-    Activity activity = instance.activity();
     Log.i(TAG, "Requesting permission: " + permission);
+    Activity activity = instance.activity();
     String[] perm = { permission };
     ActivityCompat.requestPermissions(activity, perm, PERM_CODE);
   }
@@ -195,15 +196,21 @@ public class FileSavePickerPlugin implements FlutterPlugin, MethodCallHandler {
   private static void startFileExplorer() {
     Intent intent;
 
+    Log.e(TAG, "checkPermission.");
+
     if (!checkPermission()) {
       requestPermission();
       return;
     }
 
+    Log.e(TAG, "new Intent.");
+
     intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
     intent.addCategory(Intent.CATEGORY_OPENABLE);
     intent.setType(FileSavePickerPlugin.mimeType);
     intent.putExtra(Intent.EXTRA_TITLE, FileSavePickerPlugin.filename);
+
+    Log.e(TAG, "resolveActivity.");
 
     if (intent.resolveActivity(instance.activity().getPackageManager()) == null) {
       Log.e(TAG, "Can't find a valid activity to handle the request. Make sure you've a file explorer installed.");
@@ -215,7 +222,7 @@ public class FileSavePickerPlugin implements FlutterPlugin, MethodCallHandler {
     instance.activity().startActivityForResult(intent, REQUEST_CODE);
   }
 
-  @Override
-  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-  }
+  // @Override
+  // public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+  // }
 }
