@@ -1,11 +1,13 @@
 # file_save_picker
+Android only. Unless someone wants to buy me some apple stuff.
 
-A new flutter plugin project.
-
+  file_save_picker:
+    path: ../file_save_picker
+    
 import 'package:file_save_picker/file_save_picker.dart';
 
-    var lemons = await FileSavePicker.saveFile(
-        bytes: response.bodyBytes,
+    var filePath = await FileSavePicker.saveFile(
+        bytes: fileData.bodyBytes,
         mimeType: "image/png",
         filename: '1493105660290.jpg');
 
