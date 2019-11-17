@@ -13,7 +13,10 @@ class FileSavePicker {
   static Future<dynamic> saveFile(
       {Uint8List bytes, String mimeType, String filename}) async {
     try {
-      final String path = await _channel.invokeMethod('save_file', bytes);
+      final String path = await _channel.invokeMethod('save_file', {
+        'bytes': bytes, 'mimeType': mimeType, 'filename': filename
+      });
+
       return path;
     } on PlatformException catch (e) {
       print('[$_tag] Platform exception: $e');

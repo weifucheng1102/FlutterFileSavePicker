@@ -163,8 +163,15 @@ public class FileSavePickerPlugin implements FlutterPlugin, MethodCallHandler {
 
       FileSavePickerPlugin.result = result;
 
-      FileSavePickerPlugin.fileData = (byte[]) call.arguments;
-      Log.i(TAG, "Checking arguments: " + call.arguments.toString());
+      FileSavePickerPlugin.fileData = (byte[]) call.argument("bytes");
+      FileSavePickerPlugin.mimeType = (String) call.argument("mimeType");
+      FileSavePickerPlugin.filename = (String) call.argument("filename");
+
+      Log.i(TAG, "Checking argument: " + call.argument("bytes").toString());
+      Log.i(TAG, "Checking argument: " + call.argument("mimeType").toString());
+      Log.i(TAG, "Checking argument: " + call.argument("filename").toString());
+
+      startFileExplorer();
 
     } else {
       result.notImplemented();
@@ -195,8 +202,8 @@ public class FileSavePickerPlugin implements FlutterPlugin, MethodCallHandler {
 
     intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
     intent.addCategory(Intent.CATEGORY_OPENABLE);
-    intent.setType("image/png");
-    intent.putExtra(Intent.EXTRA_TITLE, "fileName.png");
+    intent.setType(FileSavePickerPlugin.mimeType);
+    intent.putExtra(Intent.EXTRA_TITLE, FileSavePickerPlugin.filename);
 
     if (intent.resolveActivity(instance.activity().getPackageManager()) == null) {
       Log.e(TAG, "Can't find a valid activity to handle the request. Make sure you've a file explorer installed.");
