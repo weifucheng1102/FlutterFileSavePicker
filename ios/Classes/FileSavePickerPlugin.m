@@ -24,7 +24,7 @@
         _result = result;
         _arguments = call.arguments;
         NSLog(@"保存");
-        NSString * videoPath = [_arguments objectForKey:@"path"] ;
+        NSString * videoPath = [_arguments objectForKey:@"filename"] ;
         
         if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(videoPath)) {
             //保存视频到相簿
