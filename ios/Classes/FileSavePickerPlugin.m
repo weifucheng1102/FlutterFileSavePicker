@@ -1,21 +1,16 @@
 #import "FileSavePickerPlugin.h"
 
-@interface FileSavePickerPlugin ()
-
-@end
-
-@implementation FLTImagePickerSaverPlugin {
+@implementation FileSavePickerPlugin {
     FlutterResult _result;
     NSDictionary *_arguments;
-    UIImagePickerController *_imagePickerController;
     UIViewController *_viewController;
 }
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
     FlutterMethodChannel *channel =
     [FlutterMethodChannel methodChannelWithName:@"save_file"
                                 binaryMessenger:[registrar messenger]];
-    FLTImagePickerSaverPlugin *instance =
-    [[FLTImagePickerSaverPlugin alloc] init];
+    FileSavePickerPlugin *instance =
+    [[FileSavePickerPlugin alloc] init];
     [registrar addMethodCallDelegate:instance channel:channel];
 }
 - (void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result {
